@@ -8,20 +8,21 @@ PathTracker::PathTracker()
     , tf_listener{tf_buffer}
 {
     ros::NodeHandle nh;
+    ros::NodeHandle nh_p{"~"};
     path_sub = nh.subscribe("path",
                             100,
                             &PathTracker::path_callback,
                             this);
     cmd_vel_pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 100);
-    nh.param("map_frame", map_frame, std::string{"/map"});
-    nh.param("base_frame", base_frame, std::string{"/base_link"});
-    nh.param("close_enough", close_enough, 2.0);
-    nh.param("update_rate", update_rate, 10.0);
-    nh.param("K_d_t", K_d_t, 3.0);
-    nh.param("K_w", K_w, 1.0);
-    nh.param("K_d_d", K_d_d, 3.0);
+    nh_p.param("map_frame", map_frame, std::string{"map"});
+    nh_p.param("base_frame", base_frame, std::string{"base_link"});
+    nh_p.param("close_enough", close_enough, 2.0);
+    nh_p.param("update_rate", update_rate, 10.0);
+    nh_p.param("K_d_t", K_d_t, 3.0);
+    nh_p.param("K_w", K_w, 1.0);
+    nh_p.param("K_d_d", K_d_d, 3.0);
     // Velocity (m/s)
-    nh.param("v", v, 1.0);
+    nh_p.param("v", v, 1.0);
 }
 
 PathTracker::PathTracker(const PathTracker& other)
