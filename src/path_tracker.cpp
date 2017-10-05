@@ -115,19 +115,28 @@ PathTracker::start_control_loop() {
         r.sleep();
         ros::spinOnce();
 
-        if (path.empty()) {
+        if (path.size() < 2) {
             continue;
         }
 
-        auto p0 = path.front();
-        path.pop();
-        auto p1 = path.front();
+        auto p0 = path[0];
+        auto p1 = path[1];
+        // Robot
         auto pr = get_robot_pose();
+        // Closest point on path
         auto pc = geometry_msgs::Point{};
         std::tie(v, w, pc) = get_v_w(pr, p0, p1);
 
-        if (get_dist(pr.position, pc) < close_enough
-            || get_dist(p0.position, p1.position) < close_enough) {
+        if (get_dist(p1.position, pc) < close_enough) {
+            ROS_INFO("Robot close to checkpoint");
+            path.erase(path.begin());
+            continue;
+        }
+        ROS_INFO_STREAM(get_dist(p0.position, p1.position));
+        ROS_INFO_STREAM(close_enough);
+        if (get_dist(p0.position, p1.position) < close_enough) {
+            ROS_INFO("p0 and p1 too close!");
+            path.erase(path.begin());
             continue;
         }
 
@@ -143,9 +152,9 @@ PathTracker::path_callback(const nav_msgs::Path& msg) {
     path_msg = msg;
 
     // Clear all poses
-    path = decltype(path){};
+    path.clear();
     for (const auto& p : msg.poses) {
-        path.push(p.pose);
+        path.push_back(p.pose);
     }
 }
 

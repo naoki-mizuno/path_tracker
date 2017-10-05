@@ -11,7 +11,7 @@
 #include <nav_msgs/Path.h>
 
 #include <cmath>
-#include <queue>
+#include <vector>
 #include <utility>
 
 class PathTracker {
@@ -41,7 +41,7 @@ public:
     start_control_loop();
 
 private:
-    std::queue<Pose> path;
+    std::vector<Pose> path;
     nav_msgs::Path path_msg;
     ros::Subscriber path_sub;
     ros::Publisher cmd_vel_pub;
