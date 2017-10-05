@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 
     PathTracker path_tracker;
 
-    std::thread t{&PathTracker::start_control_loop, path_tracker};
+    path_tracker.start_control_loop();
 
     ros::spin();
 
