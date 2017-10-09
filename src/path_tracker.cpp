@@ -128,14 +128,14 @@ PathTracker::start_control_loop() {
         std::tie(v, w, pc) = get_v_w(pr, p0, p1);
 
         if (get_dist(p1.position, pc) < close_enough) {
-            ROS_INFO("Robot close to checkpoint");
+            ROS_INFO("Robot projection close to checkpoint");
+            ROS_INFO_STREAM(path.size() << " points left");
             path.erase(path.begin());
             continue;
         }
-        ROS_INFO_STREAM(get_dist(p0.position, p1.position));
-        ROS_INFO_STREAM(close_enough);
         if (get_dist(p0.position, p1.position) < close_enough) {
             ROS_INFO("p0 and p1 too close!");
+            ROS_INFO_STREAM(path.size() << " points left");
             path.erase(path.begin());
             continue;
         }

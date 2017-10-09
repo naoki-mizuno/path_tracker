@@ -1,6 +1,6 @@
 map_frame: map
 base_frame: base_link
-close_enough: 0.2
+close_enough: 2.0
 update_rate: 20
 K_d_t: 3.0
 K_w: 1.0
